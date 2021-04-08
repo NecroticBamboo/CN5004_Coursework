@@ -43,16 +43,13 @@ public class mainText {
     };
 
     public static void main(String[] args){
-        initialiseMenu();
-    }
-
-    private static void initialiseMenu() {
+        // main menu loop
         int choice=-1;
         do {
             try {
                 choice = menuIteration();
             } catch (IOException | ClassNotFoundException e){
-                System.out.println(e);
+                e.printStackTrace();
             }
 
         } while (choice != mainMenuOptions.length);
@@ -66,7 +63,7 @@ public class mainText {
      */
     private static int menuIteration() throws IOException, ClassNotFoundException {
         int choice;
-        List<KeyValue> list;
+        List<ServiceRecordInfo> list;
         System.out.println("u1821659");
         choice = displayMenu(mainMenuOptions,"Main menu");
 
@@ -77,15 +74,15 @@ public class mainText {
                 break;
             case 2:
                 list = emergencyService.getAllRecords();
-                findRecord(list);
+                showRecordMenu(list);
                 break;
             case 3:
                 list = emergencyService.getByService(askUserForServiceType());
-                findRecord(list);
+                showRecordMenu(list);
                 break;
             case 4:
                 list = emergencyService.getByMobile(getValidMobile("Enter mobile: "));
-                findRecord(list);
+                showRecordMenu(list);
                 break;
             case 5:
                 break;
@@ -272,7 +269,7 @@ public class mainText {
      * @param list List with records
      * @throws IOException
      */
-    private static void findRecord(List<KeyValue> list) throws IOException{
+    private static void showRecordMenu(List<ServiceRecordInfo> list) throws IOException{
         int choice;
         int fromWhere=0;
         displayRecords(list,fromWhere);
@@ -282,13 +279,13 @@ public class mainText {
             switch (choice){
                 case 1:
                     //update
-                    emergencyService.updateRecord(whatToUpdate(selectRecord(list,fromWhere)));
+                    emergencyService.updateRecord(showUpdateRecordMenu(selectRecord(list,fromWhere)));
                     System.out.println("File updated");
                     displayRecords(list,fromWhere);
                     break;
                 case 2:
                     //remove
-                    KeyValue toDelete = selectRecord(list,fromWhere);
+                    ServiceRecordInfo toDelete = selectRecord(list,fromWhere);
                     emergencyService.deleteRecord(toDelete);
                     list.remove(toDelete);
 
@@ -326,7 +323,7 @@ public class mainText {
      * @param list List of records
      * @return returns a single record
      */
-    private static KeyValue selectRecord(List<KeyValue> list, int fromWhere){
+    private static ServiceRecordInfo selectRecord(List<ServiceRecordInfo> list, int fromWhere){
       int choice = getValidInt(1,Math.min(list.size()-fromWhere,pageSize),"Select record ");
       return list.get(fromWhere+choice-1);
     }
@@ -336,7 +333,7 @@ public class mainText {
      * @param record a record that needs to be updated
      * @return returns updated record
      */
-    private static KeyValue whatToUpdate(KeyValue record){
+    private static ServiceRecordInfo showUpdateRecordMenu(ServiceRecordInfo record){
         int choice;
         Scanner sc=new Scanner(System.in);
         do{
@@ -368,7 +365,7 @@ public class mainText {
      * @param list List of records
      * @param fromWhere starting point
      */
-    private static void displayRecords(List<KeyValue> list,int fromWhere){
+    private static void displayRecords(List<ServiceRecordInfo> list, int fromWhere){
         if(list==null){
             System.out.print("No records found");
         }else if(fromWhere<0 || fromWhere>=list.size()) {
@@ -392,10 +389,10 @@ public class mainText {
      * @param record the records that needs to be displayed.
      */
     private static void displayRecord(IServiceRecord record) {
-        System.out.println("Caller name:   "+ record.getUserName());
-        System.out.println("Caller mobile: "+ record.getUserMobile());
+        System.out.println("Caller name:   "+ record.getCallerName());
+        System.out.println("Caller mobile: "+ record.getPhoneNumber());
         System.out.println("Date:          "+ record.getRecordTime());
-        System.out.println("Services:      "+ record.getRecordServices());
+        System.out.println("Services:      "+ record.getRequestedServices());
         System.out.println("Description:   "+ record.getRecordDescription());
     }
 

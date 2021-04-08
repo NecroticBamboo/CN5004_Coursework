@@ -2,16 +2,43 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IEmergencyService {
-    KeyValue addRecord(IServiceRecord record) throws IOException;
+    /**
+     * Creates a persisted record and returns ServiceRecordInfo
+     * @param record what needs to be recorded
+     * @return returns ServiceRecordInfo
+     */
+    ServiceRecordInfo addRecord(IServiceRecord record) throws IOException;
 
-    List<KeyValue> getByService(ServiceType service) ;
+    /**
+     * Searches and returns all records with the specified service type
+     * @param service the specified service
+     * @return returns list of records
+     */
+    List<ServiceRecordInfo> getByService(ServiceType service) ;
 
-    List<KeyValue> getByMobile(String mobile);
+    /**
+     * Searches and returns all records which match the specified mobile number
+     * @param mobile the specified mobile number
+     * @return returns list of records
+     */
+    List<ServiceRecordInfo> getByMobile(String mobile);
 
-    List<KeyValue> getAllRecords();
+    /**
+     * Returns all records
+     * @return returns list of records
+     */
+    List<ServiceRecordInfo> getAllRecords();
 
-    void updateRecord(KeyValue record) throws IOException;
+    /**
+     * Updates the specified record
+     * @param record records that needs to be updated
+     */
+    void updateRecord(ServiceRecordInfo record) throws IOException;
 
-    void deleteRecord(KeyValue record) throws UserInputException;
+    /**
+     * Deletes the specified record
+     * @param record record that needs to be deleted
+     */
+    void deleteRecord(ServiceRecordInfo record) throws UserInputException;
 
 }

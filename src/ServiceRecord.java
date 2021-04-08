@@ -2,32 +2,42 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Primary data record. Holds information about a call for emergency services.
+ * Implements IServiceRecord
+ */
 public class ServiceRecord implements IServiceRecord, Serializable {
 
-    private final String userName;
-    private final String userMobile;
+    private final String callerName;
+    private final String phoneNumber;
     private final Date time;
     private List<ServiceType> services;
     private String description;
 
-    public ServiceRecord(String userNameIn, String userMobileIn, Date timeIn, List<ServiceType> servicesIn, String descriptionIn){
-        userName=userNameIn;
-        userMobile=userMobileIn;
+    /**
+     * Constructor
+     * @param callerNameIn
+     * @param proneNumberIn
+     * @param timeIn
+     * @param servicesIn
+     * @param descriptionIn
+     */
+    public ServiceRecord(String callerNameIn, String proneNumberIn, Date timeIn, List<ServiceType> servicesIn, String descriptionIn){
+        callerName =callerNameIn;
+        phoneNumber =proneNumberIn;
         time=timeIn;
         services=servicesIn;
         description=descriptionIn;
     }
 
-
-
     @Override
-    public String getUserName() {
-        return userName;
+    public String getCallerName() {
+        return callerName;
     }
 
     @Override
-    public String getUserMobile() {
-        return userMobile;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     @Override
@@ -36,7 +46,7 @@ public class ServiceRecord implements IServiceRecord, Serializable {
     }
 
     @Override
-    public List<ServiceType> getRecordServices() {
+    public List<ServiceType> getRequestedServices() {
         return services;
     }
 

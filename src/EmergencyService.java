@@ -33,7 +33,7 @@ public class EmergencyService implements IEmergencyService{
      * @throws IOException
      */
     @Override
-    public KeyValue addRecord(IServiceRecord record) throws IOException{
+    public ServiceRecordInfo addRecord(IServiceRecord record) throws IOException{
 
         String formattedDate= new SimpleDateFormat("yyyy-MM-dd").format(record.getRecordTime());
         String folder=folderName+"/"+formattedDate;
@@ -46,7 +46,7 @@ public class EmergencyService implements IEmergencyService{
         String fileName=folder+"/"+uuid.toString()+".obf";
         write(record,fileName);
 
-        return new KeyValue(fileName,record);
+        return new ServiceRecordInfo(fileName,record);
     }
 
     private static void write(IServiceRecord record,String fileName) throws IOException{
@@ -69,8 +69,8 @@ public class EmergencyService implements IEmergencyService{
      * @param criteria
      * @return Records matching criteria
      */
-    private List<KeyValue> search(ISearchCriteria criteria) {
-        List<KeyValue> recordsList=new ArrayList<>();
+    private List<ServiceRecordInfo> search(ISearchCriteria criteria) {
+        List<ServiceRecordInfo> recordsList=new ArrayList<>();
         File dir = new File(folderName);
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
@@ -86,8 +86,8 @@ public class EmergencyService implements IEmergencyService{
 
                         IServiceRecord temp = (IServiceRecord) recordStream.readObject();
                         if(criteria.match(temp)){
-                            KeyValue keyValue=new KeyValue(data.getAbsolutePath(),temp);
-                            recordsList.add(keyValue);
+                            ServiceRecordInfo serviceRecordInfo =new ServiceRecordInfo(data.getAbsolutePath(),temp);
+                            recordsList.add(serviceRecordInfo);
                         }
 
                     }catch(IOException | ClassNotFoundException e){
@@ -112,8 +112,8 @@ public class EmergencyService implements IEmergencyService{
      * @return Returns a List of records and records file names with the specified service
      */
     @Override
-    public List<KeyValue> getByService(ServiceType service) {
-        return search((x)->x.getRecordServices().contains(service));
+    public List<ServiceRecordInfo> getByService(ServiceType service) {
+        return search((x)->x.getRequestedServices().contains(service));
     }
 
     /**
@@ -122,8 +122,8 @@ public class EmergencyService implements IEmergencyService{
      * @return Returns a List of records and records file names with the specified mobile number
      */
     @Override
-    public List<KeyValue> getByMobile(String mobile) {
-        return search((x)->x.getUserMobile().equals(mobile));
+    public List<ServiceRecordInfo> getByMobile(String mobile) {
+        return search((x)->x.getPhoneNumber().equals(mobile));
     }
 
     /**
@@ -131,7 +131,7 @@ public class EmergencyService implements IEmergencyService{
      * @return Returns a List of records and records file names
      */
     @Override
-    public List<KeyValue> getAllRecords() {
+    public List<ServiceRecordInfo> getAllRecords() {
         return search((x)->true);
     }
 
@@ -141,7 +141,7 @@ public class EmergencyService implements IEmergencyService{
      * @throws IOException
      */
     @Override
-    public void updateRecord(KeyValue record) throws IOException{
+    public void updateRecord(ServiceRecordInfo record) throws IOException{
         write(record.getRecord(),record.getFileName());
     }
 
@@ -151,7 +151,7 @@ public class EmergencyService implements IEmergencyService{
      * @throws UserInputException
      */
     @Override
-    public void deleteRecord(KeyValue record) throws UserInputException {
+    public void deleteRecord(ServiceRecordInfo record) throws UserInputException {
         File temp= new File(record.getFileName());
         if(!temp.delete()){
             throw new UserInputException("Cant delete the file.");

@@ -33,15 +33,15 @@ public class mainGraphic extends Application {
 
     private static ObservableList<ServiceRecordAdapter> data;
     public mainGraphic() {
-        List<KeyValue> temp=emergencyService.getAllRecords();
+        List<ServiceRecordInfo> temp=emergencyService.getAllRecords();
         prepareData(temp);
     }
 
-    private void prepareData(List<KeyValue> temp) {
+    private void prepareData(List<ServiceRecordInfo> temp) {
         List<ServiceRecordAdapter> list = new ArrayList<>();
 
-        for (KeyValue keyValue : temp) {
-            list.add(new ServiceRecordAdapter(keyValue));
+        for (ServiceRecordInfo serviceRecordInfo : temp) {
+            list.add(new ServiceRecordAdapter(serviceRecordInfo));
         }
 
         data = FXCollections.observableArrayList(list);
@@ -139,7 +139,7 @@ public class mainGraphic extends Application {
             if(!result.isPresent() || result.get()!=ButtonType.OK){
                 return;
             }
-            KeyValue current = selected.wrapped;
+            ServiceRecordInfo current = selected.wrapped;
             emergencyService.deleteRecord(current);
             data.remove(selected);
             tableView.refresh();
@@ -156,7 +156,7 @@ public class mainGraphic extends Application {
         refreshButton.setMinWidth(100);
         refreshButton.setOnAction(e -> {
             String filterValue = filterField.getText();
-            List<KeyValue> list;
+            List<ServiceRecordInfo> list;
 
             if(filterValue.isEmpty()){
                 list= emergencyService.getAllRecords();
@@ -276,23 +276,23 @@ public class mainGraphic extends Application {
     }
 
     public class ServiceRecordAdapter{
-        private final KeyValue wrapped;
+        private final ServiceRecordInfo wrapped;
 
 //        public ServiceRecordAdapter(){
 //            IServiceRecord temp= new ServiceRecord();
 //            wrapped = new KeyValue();
 //        }
 
-        public ServiceRecordAdapter(KeyValue keyValueIn){
-            wrapped=keyValueIn;
+        public ServiceRecordAdapter(ServiceRecordInfo serviceRecordInfoIn){
+            wrapped= serviceRecordInfoIn;
         }
 
         public String getUserName() {
-            return wrapped.getRecord().getUserName();
+            return wrapped.getRecord().getCallerName();
         }
 
         public String getUserMobile() {
-            return wrapped.getRecord().getUserMobile();
+            return wrapped.getRecord().getPhoneNumber();
         }
 
         public Date getRecordTime() {
@@ -300,55 +300,55 @@ public class mainGraphic extends Application {
         }
 
         public List<ServiceType> getRecordServices() {
-            return wrapped.getRecord().getRecordServices();
+            return wrapped.getRecord().getRequestedServices();
         }
 
         public boolean getFire() {
-            return wrapped.getRecord().getRecordServices().contains(ServiceType.Fire);
+            return wrapped.getRecord().getRequestedServices().contains(ServiceType.Fire);
         }
 
         public void setFire(boolean value){
             if(value){
                 if(!getFire()){
-                    wrapped.getRecord().getRecordServices().add(ServiceType.Fire);
+                    wrapped.getRecord().getRequestedServices().add(ServiceType.Fire);
                 }
             } else {
                 if(getFire()){
-                    wrapped.getRecord().getRecordServices().remove(ServiceType.Fire);
+                    wrapped.getRecord().getRequestedServices().remove(ServiceType.Fire);
                 }
             }
             save();
         }
 
         public boolean getAmbulance() {
-            return wrapped.getRecord().getRecordServices().contains(ServiceType.Ambulance);
+            return wrapped.getRecord().getRequestedServices().contains(ServiceType.Ambulance);
         }
 
         public void setAmbulance(boolean value){
             if(value){
                 if(!getAmbulance()){
-                    wrapped.getRecord().getRecordServices().add(ServiceType.Ambulance);
+                    wrapped.getRecord().getRequestedServices().add(ServiceType.Ambulance);
                 }
             } else {
                 if(getAmbulance()){
-                    wrapped.getRecord().getRecordServices().remove(ServiceType.Ambulance);
+                    wrapped.getRecord().getRequestedServices().remove(ServiceType.Ambulance);
                 }
             }
             save();
         }
 
         public boolean getPolice() {
-            return wrapped.getRecord().getRecordServices().contains(ServiceType.Police);
+            return wrapped.getRecord().getRequestedServices().contains(ServiceType.Police);
         }
 
         public void setPolice(boolean value){
             if(value){
                 if(!getPolice()){
-                    wrapped.getRecord().getRecordServices().add(ServiceType.Police);
+                    wrapped.getRecord().getRequestedServices().add(ServiceType.Police);
                 }
             } else {
                 if(getPolice()){
-                    wrapped.getRecord().getRecordServices().remove(ServiceType.Police);
+                    wrapped.getRecord().getRequestedServices().remove(ServiceType.Police);
                 }
             }
             save();
