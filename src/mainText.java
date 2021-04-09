@@ -277,10 +277,12 @@ public class mainText {
         int fromWhere = 0;
 
         do {
+            displayRecords(list, fromWhere);
+
             if (list.isEmpty()) {
                 return;
             }
-            displayRecords(list, fromWhere);
+
             choice = displayMenu(findMenuOptions, "What would you like to do?");
             switch (choice) {
                 case 1:
@@ -382,10 +384,10 @@ public class mainText {
      * @param fromWhere starting point
      */
     private static void displayRecords(List<ServiceRecordInfo> list, int fromWhere) {
-        if (list == null) {
-            System.out.print("No records found");
+        if (list == null || list.size() == 0 ) {
+            System.out.print("\n========== No records found ==========\n\n");
         } else if (fromWhere < 0 || fromWhere >= list.size()) {
-            System.out.println("Nothing to show");
+            System.out.println("\n========== Nothing to show ==========\n\n");
         } else {
             System.out.println();
             for (int count = 0; count < 5; count++) {
