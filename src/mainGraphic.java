@@ -32,8 +32,9 @@ public class mainGraphic extends Application {
     }
 
     private static ObservableList<ServiceRecordAdapter> data;
+
     public mainGraphic() {
-        List<ServiceRecordInfo> temp=emergencyService.getAllRecords();
+        List<ServiceRecordInfo> temp = emergencyService.getAllRecords();
         prepareData(temp);
     }
 
@@ -47,7 +48,7 @@ public class mainGraphic extends Application {
         data = FXCollections.observableArrayList(list);
     }
 
-    private static void alert(String message){
+    private static void alert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Alert");
         alert.setContentText(message);
@@ -56,14 +57,14 @@ public class mainGraphic extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         primaryStage.setScene(configureMainMenu());
         primaryStage.show();
     }
 
-    private Scene configureMainMenu(){
+    private Scene configureMainMenu() {
         tableView.setEditable(true);
-        Callback<TableColumn<ServiceRecordAdapter,String>, TableCell<ServiceRecordAdapter,String>> editableTextCellFactory = p -> new TextFieldTableCell<>(new StringConverter<String>() {
+        Callback<TableColumn<ServiceRecordAdapter, String>, TableCell<ServiceRecordAdapter, String>> editableTextCellFactory = p -> new TextFieldTableCell<>(new StringConverter<String>() {
 
             @Override
             public String toString(String object) {
@@ -90,25 +91,25 @@ public class mainGraphic extends Application {
         TableColumn<ServiceRecordAdapter, Boolean> fire = new TableColumn<>("Fire");
         fire.setCellValueFactory(new PropertyValueFactory<>("fire"));
         fire.setCellFactory(booleanCellFactory);
-        fire.setOnEditCommit(x-> x.getRowValue().setFire(x.getNewValue())); //lamda to save (on commit) new description to a file
+        fire.setOnEditCommit(x -> x.getRowValue().setFire(x.getNewValue())); //lamda to save (on commit) new description to a file
 
         TableColumn<ServiceRecordAdapter, Boolean> ambulance = new TableColumn<>("Ambulance");
         ambulance.setCellValueFactory(new PropertyValueFactory<>("ambulance"));
         ambulance.setCellFactory(booleanCellFactory);
-        ambulance.setOnEditCommit(x-> x.getRowValue().setAmbulance(x.getNewValue())); //lamda to save (on commit) new description to a file
+        ambulance.setOnEditCommit(x -> x.getRowValue().setAmbulance(x.getNewValue())); //lamda to save (on commit) new description to a file
 
         TableColumn<ServiceRecordAdapter, Boolean> police = new TableColumn<>("Police");
         police.setCellValueFactory(new PropertyValueFactory<>("police"));
         police.setCellFactory(booleanCellFactory);
-        police.setOnEditCommit(x-> x.getRowValue().setPolice(x.getNewValue())); //lamda to save (on commit) new description to a file
+        police.setOnEditCommit(x -> x.getRowValue().setPolice(x.getNewValue())); //lamda to save (on commit) new description to a file
 
         TableColumn<ServiceRecordAdapter, String> description = new TableColumn<>("Description");
         description.setCellValueFactory(new PropertyValueFactory<>("recordDescription"));
         description.setCellFactory(editableTextCellFactory);
-        description.setOnEditCommit(x-> x.getRowValue().setRecordDescription(x.getNewValue())); //lamda to save (on commit) new description to a file
+        description.setOnEditCommit(x -> x.getRowValue().setRecordDescription(x.getNewValue())); //lamda to save (on commit) new description to a file
 
 
-        tableView.getColumns().addAll(userName,userMobile,recordTime,fire,ambulance,police,description);
+        tableView.getColumns().addAll(userName, userMobile, recordTime, fire, ambulance, police, description);
         tableView.setItems(data);
         BorderPane borderPane = new BorderPane();
 
@@ -128,15 +129,15 @@ public class mainGraphic extends Application {
         deleteRecordButton.setMinWidth(100);
         deleteRecordButton.setOnAction(e -> {
             ServiceRecordAdapter selected = tableView.getSelectionModel().getSelectedItem();
-            if(selected==null){
+            if (selected == null) {
                 return;
             }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete");
-            alert.setContentText("Would you like to delete the record with this number: "+selected.getUserMobile()+"?");
+            alert.setContentText("Would you like to delete the record with this number: " + selected.getUserMobile() + "?");
             Optional<ButtonType> result = alert.showAndWait();
-            if(!result.isPresent() || result.get()!=ButtonType.OK){
+            if (!result.isPresent() || result.get() != ButtonType.OK) {
                 return;
             }
             ServiceRecordInfo current = selected.wrapped;
@@ -148,8 +149,8 @@ public class mainGraphic extends Application {
         VBox filter = new VBox(10);
         Label filterLabel = new Label("Enter mobile or service");
         TextField filterField = new TextField();
-        filterField.setMinSize(100,20);
-        filterField.setMaxSize(200,50);
+        filterField.setMinSize(100, 20);
+        filterField.setMaxSize(200, 50);
 
         Button refreshButton = new Button();
         refreshButton.setText("Refresh");
@@ -158,17 +159,17 @@ public class mainGraphic extends Application {
             String filterValue = filterField.getText();
             List<ServiceRecordInfo> list;
 
-            if(filterValue.isEmpty()){
-                list= emergencyService.getAllRecords();
-            } else if(isMobileValid(filterValue)){
-                list= emergencyService.getByMobile(filterValue);
-            } else if(filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Fire.toString().toLowerCase(Locale.ROOT))){
+            if (filterValue.isEmpty()) {
+                list = emergencyService.getAllRecords();
+            } else if (isMobileValid(filterValue)) {
+                list = emergencyService.getByMobile(filterValue);
+            } else if (filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Fire.toString().toLowerCase(Locale.ROOT))) {
                 list = emergencyService.getByService(ServiceType.Fire);
-            } else if(filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Ambulance.toString().toLowerCase(Locale.ROOT))){
+            } else if (filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Ambulance.toString().toLowerCase(Locale.ROOT))) {
                 list = emergencyService.getByService(ServiceType.Ambulance);
-            } else if(filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Police.toString().toLowerCase(Locale.ROOT))){
+            } else if (filterValue.toLowerCase(Locale.ROOT).equals(ServiceType.Police.toString().toLowerCase(Locale.ROOT))) {
                 list = emergencyService.getByService(ServiceType.Police);
-            } else{
+            } else {
                 return;
             }
 
@@ -177,38 +178,38 @@ public class mainGraphic extends Application {
             tableView.refresh();
         });
 
-        filter.getChildren().addAll(filterLabel,filterField,refreshButton);
+        filter.getChildren().addAll(filterLabel, filterField, refreshButton);
 
         Button exitButton = new Button();
         exitButton.setText("Exit");
         exitButton.setMinWidth(100);
         exitButton.setOnAction(e -> Platform.exit());
 
-        VBox buttonsGroup=new VBox(10);
-        buttonsGroup.getChildren().addAll(filter,addNewRecordButton,deleteRecordButton,exitButton);
+        VBox buttonsGroup = new VBox(10);
+        buttonsGroup.getChildren().addAll(filter, addNewRecordButton, deleteRecordButton, exitButton);
 
         borderPane.setRight(buttonsGroup);
 
-        return new Scene(borderPane,750, 500);
+        return new Scene(borderPane, 750, 500);
     }
 
-    private void addMenuInitialisation(){
+    private void addMenuInitialisation() {
         Stage stage = new Stage();
         stage.setTitle("Add new record");
 
-        VBox addGroup=new VBox(10);
+        VBox addGroup = new VBox(10);
         addGroup.setPadding(new Insets(5));
         GridPane grid = new GridPane();
 
         Label mobileLabel = new Label("Caller mobile");
         TextField mobileField = new TextField();
-        mobileField.setMinSize(100,20);
-        mobileField.setMaxSize(400,30);
+        mobileField.setMinSize(100, 20);
+        mobileField.setMaxSize(400, 30);
 
         Label nameLabel = new Label("Caller name");
         TextField nameField = new TextField();
-        nameField.setMinSize(100,20);
-        nameField.setMaxSize(400,30);
+        nameField.setMinSize(100, 20);
+        nameField.setMaxSize(400, 30);
 
         Label servicesLabel = new Label("Services requested");
         servicesLabel.setMinWidth(120);
@@ -216,37 +217,37 @@ public class mainGraphic extends Application {
         CheckBox fire = new CheckBox("Fire");
         CheckBox ambulance = new CheckBox("Ambulance");
         CheckBox police = new CheckBox("Police");
-        checkBoxGroup.getChildren().addAll(fire,ambulance,police);
+        checkBoxGroup.getChildren().addAll(fire, ambulance, police);
 
         Label descriptionLabel = new Label("Call notes");
         TextArea descriptionField = new TextArea();
-        descriptionField.setMinSize(200,30);
+        descriptionField.setMinSize(200, 30);
 
         Button submit = new Button();
         submit.setText("Submit");
-        submit.setOnAction(x->{
+        submit.setOnAction(x -> {
             String name = nameField.getText();
             String mobile = mobileField.getText();
             String description = descriptionField.getText();
             Date date = new Date();
             List<ServiceType> services = new ArrayList<>();
-            if(fire.isSelected()){
+            if (fire.isSelected()) {
                 services.add(ServiceType.Fire);
             }
-            if(ambulance.isSelected()){
+            if (ambulance.isSelected()) {
                 services.add(ServiceType.Ambulance);
             }
-            if(police.isSelected()){
+            if (police.isSelected()) {
                 services.add(ServiceType.Police);
             }
 
-            if(name.equals("") || !isMobileValid(mobile) || services.isEmpty() || description.equals("")){
+            if (name.equals("") || !isMobileValid(mobile) || services.isEmpty() || description.equals("")) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Something is not filled");
                 alert.setContentText("Some of the fields are filled incorrectly.");
                 alert.showAndWait();
             } else {
-                IServiceRecord temp = new ServiceRecord(name,mobile,date,services,description);
+                IServiceRecord temp = new ServiceRecord(name, mobile, date, services, description);
                 try {
                     ServiceRecordAdapter rec = new ServiceRecordAdapter(emergencyService.addRecord(temp));
                     data.add(rec);
@@ -257,25 +258,25 @@ public class mainGraphic extends Application {
             }
         });
 
-        grid.add(mobileLabel,0,0);
-        grid.add(mobileField,1,0);
-        grid.add(nameLabel,0,1);
-        grid.add(nameField,1,1);
-        grid.add(servicesLabel,0,2);
-        grid.add(checkBoxGroup,1,2);
-        grid.add(descriptionLabel,0,3);
-        grid.add(descriptionField,1,3);
+        grid.add(mobileLabel, 0, 0);
+        grid.add(mobileField, 1, 0);
+        grid.add(nameLabel, 0, 1);
+        grid.add(nameField, 1, 1);
+        grid.add(servicesLabel, 0, 2);
+        grid.add(checkBoxGroup, 1, 2);
+        grid.add(descriptionLabel, 0, 3);
+        grid.add(descriptionField, 1, 3);
 
-        addGroup.getChildren().addAll(grid,submit);
-        stage.setScene(new Scene(addGroup,400,300));
+        addGroup.getChildren().addAll(grid, submit);
+        stage.setScene(new Scene(addGroup, 400, 300));
         stage.show();
     }
 
-    private static boolean isMobileValid(String mobile){
+    private static boolean isMobileValid(String mobile) {
         return !mobile.equals("") && mobile.matches("\\+?[0-9][0-9\\-]+") && mobile.length() <= 25;
     }
 
-    public class ServiceRecordAdapter{
+    public class ServiceRecordAdapter {
         private final ServiceRecordInfo wrapped;
 
 //        public ServiceRecordAdapter(){
@@ -283,8 +284,8 @@ public class mainGraphic extends Application {
 //            wrapped = new KeyValue();
 //        }
 
-        public ServiceRecordAdapter(ServiceRecordInfo serviceRecordInfoIn){
-            wrapped= serviceRecordInfoIn;
+        public ServiceRecordAdapter(ServiceRecordInfo serviceRecordInfoIn) {
+            wrapped = serviceRecordInfoIn;
         }
 
         public String getUserName() {
@@ -307,13 +308,13 @@ public class mainGraphic extends Application {
             return wrapped.getRecord().getRequestedServices().contains(ServiceType.Fire);
         }
 
-        public void setFire(boolean value){
-            if(value){
-                if(!getFire()){
+        public void setFire(boolean value) {
+            if (value) {
+                if (!getFire()) {
                     wrapped.getRecord().getRequestedServices().add(ServiceType.Fire);
                 }
             } else {
-                if(getFire()){
+                if (getFire()) {
                     wrapped.getRecord().getRequestedServices().remove(ServiceType.Fire);
                 }
             }
@@ -324,13 +325,13 @@ public class mainGraphic extends Application {
             return wrapped.getRecord().getRequestedServices().contains(ServiceType.Ambulance);
         }
 
-        public void setAmbulance(boolean value){
-            if(value){
-                if(!getAmbulance()){
+        public void setAmbulance(boolean value) {
+            if (value) {
+                if (!getAmbulance()) {
                     wrapped.getRecord().getRequestedServices().add(ServiceType.Ambulance);
                 }
             } else {
-                if(getAmbulance()){
+                if (getAmbulance()) {
                     wrapped.getRecord().getRequestedServices().remove(ServiceType.Ambulance);
                 }
             }
@@ -341,13 +342,13 @@ public class mainGraphic extends Application {
             return wrapped.getRecord().getRequestedServices().contains(ServiceType.Police);
         }
 
-        public void setPolice(boolean value){
-            if(value){
-                if(!getPolice()){
+        public void setPolice(boolean value) {
+            if (value) {
+                if (!getPolice()) {
                     wrapped.getRecord().getRequestedServices().add(ServiceType.Police);
                 }
             } else {
-                if(getPolice()){
+                if (getPolice()) {
                     wrapped.getRecord().getRequestedServices().remove(ServiceType.Police);
                 }
             }
@@ -367,7 +368,7 @@ public class mainGraphic extends Application {
         private void save() {
             try {
                 emergencyService.updateRecord(wrapped);
-            } catch (IOException e){
+            } catch (IOException e) {
                 alert(e.getMessage());
             }
         }
@@ -375,11 +376,12 @@ public class mainGraphic extends Application {
 
     class BooleanCell extends TableCell<ServiceRecordAdapter, Boolean> {
         private final CheckBox checkBox;
+
         public BooleanCell() {
             checkBox = new CheckBox();
             checkBox.setDisable(true);
             checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if(isEditing())
+                if (isEditing())
                     commitEdit(newValue != null && newValue);
             });
             this.setGraphic(checkBox);

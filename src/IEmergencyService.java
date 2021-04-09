@@ -4,6 +4,7 @@ import java.util.List;
 public interface IEmergencyService {
     /**
      * Creates a persisted record and returns ServiceRecordInfo
+     *
      * @param record what needs to be recorded
      * @return returns ServiceRecordInfo
      */
@@ -11,13 +12,15 @@ public interface IEmergencyService {
 
     /**
      * Searches and returns all records with the specified service type
+     *
      * @param service the specified service
      * @return returns list of records
      */
-    List<ServiceRecordInfo> getByService(ServiceType service) ;
+    List<ServiceRecordInfo> getByService(ServiceType service);
 
     /**
      * Searches and returns all records which match the specified mobile number
+     *
      * @param mobile the specified mobile number
      * @return returns list of records
      */
@@ -25,18 +28,21 @@ public interface IEmergencyService {
 
     /**
      * Returns all records
+     *
      * @return returns list of records
      */
     List<ServiceRecordInfo> getAllRecords();
 
     /**
      * Updates the specified record
+     *
      * @param record records that needs to be updated
      */
     void updateRecord(ServiceRecordInfo record) throws IOException;
 
     /**
      * Deletes the specified record
+     *
      * @param record record that needs to be deleted
      */
     void deleteRecord(ServiceRecordInfo record) throws UserInputException;

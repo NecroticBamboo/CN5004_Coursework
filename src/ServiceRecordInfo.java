@@ -7,24 +7,26 @@ public class ServiceRecordInfo {
     private final String fileName;
     private final IServiceRecord record;
 
-    public ServiceRecordInfo(String fileNameIn, IServiceRecord recordIn){
-        fileName=fileNameIn;
-        record=recordIn;
+    public ServiceRecordInfo(String fileNameIn, IServiceRecord recordIn) {
+        fileName = fileNameIn;
+        record = recordIn;
     }
 
     /**
      * Do not use outside of EmergencyService
+     *
      * @return
      */
-    public String getFileName(){
+    public String getFileName() {
         return fileName;
     }
 
     /**
      * Get service record
+     *
      * @return
      */
-    public IServiceRecord getRecord(){
+    public IServiceRecord getRecord() {
         return record;
     }
 

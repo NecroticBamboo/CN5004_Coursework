@@ -6,17 +6,19 @@ public class UserInputException extends RuntimeException {
 
     /**
      * Constructor
+     *
      * @param descriptionIn the error message
      */
-    public UserInputException(String descriptionIn){
-        description=descriptionIn;
+    public UserInputException(String descriptionIn) {
+        description = descriptionIn;
     }
 
     /**
      * What went wrong
+     *
      * @return returns message of the error
      */
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 }

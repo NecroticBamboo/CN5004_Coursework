@@ -16,18 +16,19 @@ public class ServiceRecord implements IServiceRecord, Serializable {
 
     /**
      * Constructor
+     *
      * @param callerNameIn
      * @param proneNumberIn
      * @param timeIn
      * @param servicesIn
      * @param descriptionIn
      */
-    public ServiceRecord(String callerNameIn, String proneNumberIn, Date timeIn, List<ServiceType> servicesIn, String descriptionIn){
-        callerName =callerNameIn;
-        phoneNumber =proneNumberIn;
-        time=timeIn;
-        services=servicesIn;
-        description=descriptionIn;
+    public ServiceRecord(String callerNameIn, String proneNumberIn, Date timeIn, List<ServiceType> servicesIn, String descriptionIn) {
+        callerName = callerNameIn;
+        phoneNumber = proneNumberIn;
+        time = timeIn;
+        services = servicesIn;
+        description = descriptionIn;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ServiceRecord implements IServiceRecord, Serializable {
 
     @Override
     public void updateServices(List<ServiceType> newServices) {
-        services=newServices;
+        services = newServices;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ServiceRecord implements IServiceRecord, Serializable {
 
     @Override
     public void updateRecordDescription(String newDescription) {
-        description=newDescription;
+        description = newDescription;
     }
 
 }

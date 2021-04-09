@@ -5,6 +5,7 @@ public interface ISearchCriteria {
 
     /**
      * Filter function.
+     *
      * @param record
      * @return true if record matches the criteria
      */
