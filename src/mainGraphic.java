@@ -33,11 +33,18 @@ public class mainGraphic extends Application {
 
     private static ObservableList<ServiceRecordAdapter> data;
 
+    /**
+     * Constructor
+     */
     public mainGraphic() {
         List<ServiceRecordInfo> temp = emergencyService.getAllRecords();
         prepareData(temp);
     }
 
+    /**
+     * Create observable list for table data
+     * @param temp
+     */
     private void prepareData(List<ServiceRecordInfo> temp) {
         List<ServiceRecordAdapter> list = new ArrayList<>();
 
@@ -48,6 +55,10 @@ public class mainGraphic extends Application {
         data = FXCollections.observableArrayList(list);
     }
 
+    /**
+     * Show error dialog
+     * @param message what to display
+     */
     private static void alert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Alert");
@@ -56,13 +67,22 @@ public class mainGraphic extends Application {
         alert.showAndWait();
     }
 
+    /**
+     * Show main window
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setScene(configureMainMenu());
+        primaryStage.setScene(createSceneUI());
+        primaryStage.setTitle("Emergency services");
         primaryStage.show();
     }
 
-    private Scene configureMainMenu() {
+    /**
+     * create all UI elements
+     * @return scene to display
+     */
+    private Scene createSceneUI() {
         tableView.setEditable(true);
         Callback<TableColumn<ServiceRecordAdapter, String>, TableCell<ServiceRecordAdapter, String>> editableTextCellFactory = p -> new TextFieldTableCell<>(new StringConverter<String>() {
 
@@ -119,7 +139,7 @@ public class mainGraphic extends Application {
         addNewRecordButton.setText("Add");
         addNewRecordButton.setMinWidth(100);
         addNewRecordButton.setOnAction(e -> {
-            addMenuInitialisation();
+            addNewRecord();
             tableView.refresh();
         });
 
@@ -147,7 +167,7 @@ public class mainGraphic extends Application {
         });
 
         VBox filter = new VBox(10);
-        Label filterLabel = new Label("Enter mobile or service");
+        Label filterLabel = new Label("Enter mobile or service \nand press Refresh");
         TextField filterField = new TextField();
         filterField.setMinSize(100, 20);
         filterField.setMaxSize(200, 50);
@@ -179,21 +199,34 @@ public class mainGraphic extends Application {
         });
 
         filter.getChildren().addAll(filterLabel, filterField, refreshButton);
+        Label helpLabel = new Label("Click on service column cell \nor description to edit");
 
         Button exitButton = new Button();
         exitButton.setText("Exit");
         exitButton.setMinWidth(100);
         exitButton.setOnAction(e -> Platform.exit());
 
-        VBox buttonsGroup = new VBox(10);
-        buttonsGroup.getChildren().addAll(filter, addNewRecordButton, deleteRecordButton, exitButton);
+        VBox buttonsGroup = new VBox(
+                filter,
+                new Label(""),
+                addNewRecordButton,
+                deleteRecordButton,
+                helpLabel,
+                new Label(""),
+                exitButton);
+
+        buttonsGroup.setPadding(new Insets(5));
+        buttonsGroup.setSpacing(5);
 
         borderPane.setRight(buttonsGroup);
 
         return new Scene(borderPane, 750, 500);
     }
 
-    private void addMenuInitialisation() {
+    /**
+     * Show add record dialog
+     */
+    private void addNewRecord() {
         Stage stage = new Stage();
         stage.setTitle("Add new record");
 
@@ -272,17 +305,20 @@ public class mainGraphic extends Application {
         stage.show();
     }
 
+    /**
+     * Check if mobile number is correct
+     * @param mobile
+     * @return
+     */
     private static boolean isMobileValid(String mobile) {
         return !mobile.equals("") && mobile.matches("\\+?[0-9][0-9\\-]+") && mobile.length() <= 25;
     }
 
+    /**
+     * Adapter class to make ServiceInfo suitable for UI
+     */
     public class ServiceRecordAdapter {
         private final ServiceRecordInfo wrapped;
-
-//        public ServiceRecordAdapter(){
-//            IServiceRecord temp= new ServiceRecord();
-//            wrapped = new KeyValue();
-//        }
 
         public ServiceRecordAdapter(ServiceRecordInfo serviceRecordInfoIn) {
             wrapped = serviceRecordInfoIn;
@@ -374,6 +410,9 @@ public class mainGraphic extends Application {
         }
     }
 
+    /**
+     * Boolean column displaying checkbox
+     */
     class BooleanCell extends TableCell<ServiceRecordAdapter, Boolean> {
         private final CheckBox checkBox;
 
